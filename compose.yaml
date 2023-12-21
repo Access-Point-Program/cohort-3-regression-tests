@@ -46,9 +46,8 @@ services:
       - simulation_password=${simulation_password}
       - simulation_url=jdbc:postgresql://host.docker.internal:5432/simulationdb
     ports:
-      - '9004:9004'
+      - '9010:9010'
   
-
   # CNN6
   reports:
     image: 'cohort-3-reports:latest'
