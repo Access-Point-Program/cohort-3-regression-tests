@@ -27,3 +27,5 @@ How to access you Enviromental variables?
     * name: ```rules_engine_password``` 
     * name: ```simulations_username```
     * name: ```simulation_password``` 
+
+7. Run ```docker compose up``` to execute compose file.
