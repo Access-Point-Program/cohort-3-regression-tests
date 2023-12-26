@@ -12,6 +12,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.safari.SafariDriver;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,6 +37,10 @@ public class StepDefinitions {
                 return new EdgeDriver();
             case "firefox":
                 return new FirefoxDriver();
+            case "safari":
+                return new SafariDriver();
+            case "IE":
+                return new InternetExplorerDriver();
             default:
                 return new ChromeDriver();
         }
