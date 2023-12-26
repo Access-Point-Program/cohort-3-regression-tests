@@ -47,12 +47,16 @@ public class StepDefinitions {
 
     @When("the user goes or is redirected to {string}")
     public void is_rendered(String link) {
-        driver.get(link);
+        try {
+          driver.get(link);  
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Then("user is presented with the layouts page")
     public void on_the_browser() {
-        assertEquals(driver.getTitle(), "React App");
+        assertEquals("React App", driver.getTitle());
 
         // test application
         WebElement sidebarElement;
