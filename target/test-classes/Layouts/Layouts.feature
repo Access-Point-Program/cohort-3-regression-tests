@@ -13,6 +13,6 @@ Feature: Layouts Page loads on most popular browsers
           | edge           |
 
     Scenario: Add new Layouts
-      Given the layout page loads
+      Given the layout grid loads
       When the user makes all nessesary inputs and clicks Save
       Then the layout should be saved in the database

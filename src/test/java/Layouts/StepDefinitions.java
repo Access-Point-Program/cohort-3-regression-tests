@@ -17,6 +17,8 @@ import org.openqa.selenium.safari.SafariDriver;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class StepDefinitions {
@@ -31,8 +33,8 @@ public class StepDefinitions {
 
     //  Page loads on <driver>
 
-    private WebDriver decideDriver(String d){
-        switch (d) {
+    private WebDriver decideDriver(String browser){
+        switch (browser) {
             case "chrome":
                 return new ChromeDriver();
             case "edge":
@@ -87,23 +89,44 @@ public class StepDefinitions {
     }
 
 
-    // User can add a new layout to the database
+    // Add new Layouts
 
-    @Given("the layout page loads")
+    @Given("the layout grid loads")
     public void page_loads(){
         driver = decideDriver("chrome");
         driver.get("http://localhost:9003/");
     }
 
     @When("the user makes all nessesary inputs and clicks Save")
-    public void edit_page(){
+    public void edit_page() throws InterruptedException{
 
-        List<WebElement> grid = driver.findElements(By.className("type-picker"));
+        /*  class index. 
+        container 
+            -> row(s) {forEach} 
+                -> type-picker(s) {forEach} 
+                    -> dropdown-center 
+                        -> button(collor checking), dropdown-menu 
+                            -> a(3) -> respective divs. open, wall, robot, end.
+        */
 
-        grid.get(0).click();
-        
+        List<WebElement> grid = driver.findElements(By.className("container"));
 
-        System.out.println(grid.get(0).findElements(By.className("dropdown-center")).size());
+        System.out.println(grid.size());
+        // random positions: make sure they are all unique
+        HashMap<Integer, Integer> exceptions = new HashMap<>();
+
+        // add a robot (if possible at a random position.)
+
+        // add an end (if possible at a random position.)
+
+        // add multiple walls. (random positions if possible)
+
+        // type a name
+
+        // click "save"
+
+
+
     }
 
     @Then("the layout should be saved in the database")
@@ -111,6 +134,26 @@ public class StepDefinitions {
 
     }
 
+
+    private HashMap<Integer, Integer> selectFromGrid(List<WebElement> grid, String type, HashMap<Integer, Integer> exceptions) throws InterruptedException{
+
+        // Random algorithm, with accounting for algorithm.
+        HashMap<Integer, Integer> values = new HashMap<>();
+        while(values.isEmpty()){
+            
+        }
+        grid.get(0).click();
+
+        Thread.sleep(1000);
+        
+        grid.get(0).findElement(By.className(type)).click();
+        
+        // System.out.println(grid.get(0).findElement(By.tagName("button")).getAttribute("class"));
+
+        assertTrue(grid.get(0).findElement(By.tagName("button")).getAttribute("class").contains(type));
+
+        return exceptions;
+    }
 
 
 
