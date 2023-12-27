@@ -140,7 +140,7 @@ public class StepDefinitions {
         // Random algorithm, with accounting for algorithm.
         HashMap<Integer, Integer> values = new HashMap<>();
         while(values.isEmpty()){
-            
+            Integer f = (int)(Math.random() * 10) % 10;
         }
         grid.get(0).click();
 
