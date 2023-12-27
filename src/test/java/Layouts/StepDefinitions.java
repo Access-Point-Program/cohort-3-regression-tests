@@ -17,6 +17,8 @@ import org.openqa.selenium.safari.SafariDriver;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 public class StepDefinitions {
 
     private WebDriver driver;
@@ -64,38 +66,59 @@ public class StepDefinitions {
     public void on_the_browser() {
         assertEquals("React App", driver.getTitle());
 
-        // test application
-        WebElement sidebarElement;
-        WebElement layoutEditorElement;
-        WebElement settingsElement;
-        Integer gridLen;
         try {
-          sidebarElement = driver.findElement(By.className("side-bar"));
+          WebElement sidebarElement = driver.findElement(By.className("side-bar"));
 
-          layoutEditorElement = driver.findElement(By.className("simulation-card"));
+          WebElement layoutEditorElement = driver.findElement(By.className("simulation-card"));
 
-          settingsElement = driver.findElement(By.className("settings"));
+          WebElement settingsElement = driver.findElement(By.className("settings"));
 
-          gridLen = driver.findElements(By.className("type-picker")).size();
+          Integer gridLen = driver.findElements(By.className("type-picker")).size();
           
-
-
-          // sidebar
           assertTrue(sidebarElement.isDisplayed());
           assertTrue(layoutEditorElement.isDisplayed());
           assertTrue(settingsElement.isDisplayed());
           assertEquals(gridLen, 81);
 
-         
-
-
-          
-
         } catch (NoSuchElementException e) {
             System.out.println("No Such element Found. Error: " + e.getMessage());
+            assertTrue(false);
         }
+    }
 
+
+    // User can add a new layout to the database
+
+    @Given("the layout page loads")
+    public void page_loads(){
+        driver = decideDriver("chrome");
+        driver.get("http://localhost:9003/");
+    }
+
+    @When("the user makes all nessesary inputs and clicks Save")
+    public void edit_page(){
+
+        List<WebElement> grid = driver.findElements(By.className("type-picker"));
+
+        grid.get(0).click();
+        
+
+        System.out.println(grid.get(0).findElements(By.className("dropdown-center")).size());
+    }
+
+    @Then("the layout should be saved in the database")
+    public void saved_in_database(){
 
     }
+
+
+
+
+
+    // TODO: Figure out where the data convertions are happening and then run a get to the API then compare?
+
+    // Idea 2: Fixture file.
+
+    // Idea 3: Manual.
       
 }

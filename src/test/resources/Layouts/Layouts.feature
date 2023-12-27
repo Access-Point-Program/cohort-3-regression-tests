@@ -11,3 +11,8 @@ Feature: Layouts Page loads on most popular browsers
           | driver         |
           | chrome         |
           | edge           |
+
+    Scenario: Add new Layouts
+      Given the layout page loads
+      When the user makes all nessesary inputs and clicks Save
+      Then the layout should be saved in the database
