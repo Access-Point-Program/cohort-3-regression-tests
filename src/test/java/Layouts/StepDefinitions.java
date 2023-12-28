@@ -18,7 +18,6 @@ import org.openqa.selenium.safari.SafariDriver;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class StepDefinitions {
@@ -100,32 +99,49 @@ public class StepDefinitions {
     @When("the user makes all nessesary inputs and clicks Save")
     public void edit_page() throws InterruptedException{
 
-        /*  class index. 
-        container 
-            -> row(s) {forEach} 
-                -> type-picker(s) {forEach} 
-                    -> dropdown-center 
-                        -> button(collor checking), dropdown-menu 
-                            -> a(3) -> respective divs. open, wall, robot, end.
-        */
+        // Layouts grid
+        WebElement grid = driver.findElement(By.className("container"));
 
-        List<WebElement> grid = driver.findElements(By.className("container"));
+        // save previous random positions to make sure they are all unique
+        List<List<Integer>> exceptions = new ArrayList<>();
 
-        System.out.println(grid.size());
-        // random positions: make sure they are all unique
-        HashMap<Integer, Integer> exceptions = new HashMap<>();
+        // add a robot, update the list
+        exceptions = selectFromGrid(grid, "robot", exceptions);
 
-        // add a robot (if possible at a random position.)
+        // add an end, update the list
+        exceptions = selectFromGrid(grid, "end", exceptions);
 
-        // add an end (if possible at a random position.)
+        // add multiple walls. random amount between 0-15
+        int walls = (int) (Math.random() * 15) % 100;
+        
+        for(int i = 0; i < walls; i++){
+            exceptions = selectFromGrid(grid, "wall", exceptions);
+        }
 
-        // add multiple walls. (random positions if possible)
+        // Layouts name input
 
-        // type a name
+        WebElement name = driver.findElement(By.xpath("//input[@placeholder=\"Layout Name\"]"));
+
+        name.sendKeys("layout1");
+
+        // Facing direction
+        WebElement direction = driver.findElement(By.xpath("//button[@data-testid=\"dd-menu\"]"));
+
+        direction.click();
+
+        Thread.sleep(1000);
+
+        // Select direction
+        WebElement north = driver.findElement(By.xpath("//a[@data-testid=\"NORTH\"]"));
+
+        north.click();
 
         // click "save"
+        WebElement save = driver.findElement(By.className("save-cancel")).findElement(By.tagName("button"));
 
+        save.click();
 
+        Thread.sleep(3000);
 
     }
 
@@ -135,28 +151,47 @@ public class StepDefinitions {
     }
 
 
-    private HashMap<Integer, Integer> selectFromGrid(List<WebElement> grid, String type, HashMap<Integer, Integer> exceptions) throws InterruptedException{
+    private List<List<Integer>> selectFromGrid(WebElement grid, String type, List<List<Integer>> exceptions) throws InterruptedException{
 
         // Random algorithm, with accounting for algorithm.
-        HashMap<Integer, Integer> values = new HashMap<>();
-        while(values.isEmpty()){
-            Integer f = (int)(Math.random() * 10) % 10;
-        }
-        grid.get(0).click();
+        List<Integer> trial = new ArrayList<>();
 
-        Thread.sleep(1000);
+        while(true){
+            trial.add((int)((Math.random() * 9) % 100));
+            trial.add((int)((Math.random() * 9) % 100));
+
+            if(exceptions.contains(trial)){
+                trial.clear();
+                continue;
+            } else {
+                exceptions.add(trial);
+                break;
+            }
+        }
+
+
+        // row
+        grid = grid.findElements(By.className("row")).get(trial.get(0)).findElements(By.className("col")).get(trial.get(1));
+
         
-        grid.get(0).findElement(By.className(type)).click();
+        grid.click();
+
+        Thread.sleep(200);
+        
+        grid.findElement(By.className(type)).click();
         
         // System.out.println(grid.get(0).findElement(By.tagName("button")).getAttribute("class"));
 
-        assertTrue(grid.get(0).findElement(By.tagName("button")).getAttribute("class").contains(type));
+        assertTrue(grid.findElement(By.tagName("button")).getAttribute("class").contains(type));
 
         return exceptions;
     }
 
 
 
+    // TODO: implement @Then()
+
+    // Maybe add: Random String characters
 
     // TODO: Figure out where the data convertions are happening and then run a get to the API then compare?
 
